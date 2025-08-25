@@ -19,6 +19,7 @@ import * as DocumentPicker from 'expo-document-picker';
 const ROLES = [
   { value: 'patient', label: 'Patient' },
   { value: 'professionnel', label: 'Professionnel de santé' },
+  { value: 'admin', label: 'Administrateur' },
 ];
 
 const SEXES = [

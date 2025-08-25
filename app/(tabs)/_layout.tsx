@@ -1,7 +1,12 @@
 import { Tabs } from 'expo-router';
+import { useProfile } from '@/hooks/useProfile';
 import { Chrome as Home, User, Calendar, MessageSquare } from 'lucide-react-native';
+import { Shield } from 'lucide-react-native';
 
 export default function TabLayout() {
+  const { profile } = useProfile();
+  const isAdmin = profile?.role === 'admin';
+
   return (
     <Tabs
       screenOptions={{
@@ -57,6 +62,17 @@ export default function TabLayout() {
           ),
         }}
       />
+      {isAdmin && (
+        <Tabs.Screen
+          name="admin"
+          options={{
+            title: 'Administration',
+            tabBarIcon: ({ size, color }) => (
+              <Shield size={size} color={color} />
+            ),
+          }}
+        />
+      )}
     </Tabs>
   );
 }
