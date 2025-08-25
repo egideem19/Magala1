@@ -48,7 +48,7 @@ export default function SignInScreen() {
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => router.back()}
+          onPress={() => router.replace('/(auth)/welcome')}
         >
           <ArrowLeft size={24} color="#64748B" />
         </TouchableOpacity>
