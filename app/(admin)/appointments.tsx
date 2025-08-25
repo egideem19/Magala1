@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAdmin } from '@/hooks/useAdmin';
-import { ArrowLeft, Calendar, User, XCircle } from 'lucide-react-native';
+import { ArrowLeft, Calendar, User, Circle as XCircle } from 'lucide-react-native';
 import { Database } from '@/lib/database.types';
 
 type Appointment = Database['public']['Tables']['appointments']['Row'] & {

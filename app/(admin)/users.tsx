@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAdmin } from '@/hooks/useAdmin';
-import { ArrowLeft, User, Shield, CheckCircle, XCircle, Clock } from 'lucide-react-native';
+import { ArrowLeft, User, Shield, CircleCheck as CheckCircle, Circle as XCircle, Clock } from 'lucide-react-native';
 import { Database } from '@/lib/database.types';
 
 type Profile = Database['public']['Tables']['profiles']['Row'];
