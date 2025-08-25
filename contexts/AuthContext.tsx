@@ -22,11 +22,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     mounted.current = true;
 
+    // Check if Supabase is properly configured
+    if (!process.env.EXPO_PUBLIC_SUPABASE_URL || !process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY) {
+      console.warn('Supabase not configured. Please connect to Supabase.');
+      setLoading(false);
+      return;
+    }
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (mounted.current) {
         setSession(session);
         setUser(session?.user ?? null);
+        setLoading(false);
+      }
+    }).catch((error) => {
+      console.error('Error getting session:', error);
+      if (mounted.current) {
         setLoading(false);
       }
     });
