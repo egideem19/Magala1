@@ -8,16 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { 
-  Users, 
-  Calendar, 
-  CreditCard, 
-  FileText, 
-  Shield,
-  TrendingUp,
-  AlertTriangle,
-  CheckCircle
-} from 'lucide-react-native';
+import { Users, Calendar, CreditCard, FileText, Shield, TrendingUp, TriangleAlert as AlertTriangle, CircleCheck as CheckCircle } from 'lucide-react-native';
 
 export default function AdminDashboardScreen() {
   const router = useRouter();
