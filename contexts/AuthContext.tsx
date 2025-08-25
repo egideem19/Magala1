@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 
@@ -17,48 +17,45 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const mounted = useRef(false);
 
   useEffect(() => {
+    mounted.current = true;
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
+      if (mounted.current) {
+        setSession(session);
+        setUser(session?.user ?? null);
+        setLoading(false);
+      }
     });
 
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  // Listen for auth state changes and redirect to login if needed
-  useEffect(() => {
-    // Listener pour gérer les changements d'état d'authentification
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
       console.log('Auth state change:', event, session);
       
-      if (event === 'SIGNED_OUT' || !session) {
-        setSession(null);
-        setUser(null);
-        // Redirection automatique vers Login si session expire ou utilisateur déconnecté
-      } else if (event === 'SIGNED_IN' && session) {
-        setSession(session);
-        setUser(session.user);
-      } else if (event === 'TOKEN_REFRESHED' && session) {
-        setSession(session);
-        setUser(session.user);
+      if (mounted.current) {
+        if (event === 'SIGNED_OUT' || !session) {
+          setSession(null);
+          setUser(null);
+        } else if (event === 'SIGNED_IN' && session) {
+          setSession(session);
+          setUser(session.user);
+        } else if (event === 'TOKEN_REFRESHED' && session) {
+          setSession(session);
+          setUser(session.user);
+        }
+        setLoading(false);
       }
-      setLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted.current = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signUp = async (email: string, password: string) => {
